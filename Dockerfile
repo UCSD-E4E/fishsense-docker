@@ -24,10 +24,11 @@ RUN apt-get install -y build-essential \
                             # git-annex \
                             # pipx
 
-ENV HOME="/home/${USERNAME}"
+USER ubuntu
+
+ENV HOME="/home/ubuntu"
 RUN mkdir -p ${HOME}
 WORKDIR ${HOME}
-RUN apt-get install -y git
 RUN git clone --depth=1 https://github.com/pyenv/pyenv.git .pyenv
 ENV PYENV_ROOT="${HOME}/.pyenv"
 ENV PATH="${PYENV_ROOT}/shims:${PYENV_ROOT}/bin:${PATH}"
