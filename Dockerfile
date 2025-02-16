@@ -1,44 +1,49 @@
-FROM ubuntu:noble
+FROM ubuntu:24.04
 
-RUN apt-get update
-RUN apt-get install -y build-essential \
-                            git \
-                            libssl-dev \
-                            zlib1g-dev \
-                            libbz2-dev \
-                            libreadline-dev \
-                            libsqlite3-dev \
-                            wget \
-                            curl \
-                            llvm \
-                            libncurses5-dev \
-                            libncursesw5-dev \
-                            xz-utils \
-                            tk-dev \
-                            libffi-dev \
-                            liblzma-dev \
-                            python3-openssl \
-                            libopencv-dev \
-                            clang \
-                            libclang-dev
-                            # git-annex \
-                            # pipx
+SHELL ["/bin/bash", "-c"] 
+
+RUN apt-get update && apt-get upgrade -y && \
+    apt-get install -y sudo \
+                        build-essential \
+                        git \
+                        libssl-dev \
+                        zlib1g-dev \
+                        libbz2-dev \
+                        libreadline-dev \
+                        libsqlite3-dev \
+                        wget \
+                        curl \
+                        llvm \
+                        libncurses5-dev \
+                        libncursesw5-dev \
+                        xz-utils \
+                        tk-dev \
+                        libffi-dev \
+                        liblzma-dev \
+                        python3-openssl \
+                        libopencv-dev \
+                        clang \
+                        libclang-dev \
+                        llvm \
+                        cmake \
+    && apt-get clean && rm -rf /var/lib/apt/lists/*
+
+RUN echo 'ubuntu ALL=(ALL) NOPASSWD: ALL' >> /etc/sudoers
 
 USER ubuntu
-
 ENV HOME="/home/ubuntu"
 RUN mkdir -p ${HOME}
 WORKDIR ${HOME}
+
+RUN curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh -s -- -y
+
 RUN git clone --depth=1 https://github.com/pyenv/pyenv.git .pyenv
 ENV PYENV_ROOT="${HOME}/.pyenv"
 ENV PATH="${PYENV_ROOT}/shims:${PYENV_ROOT}/bin:${PATH}"
 
-RUN pyenv install 3.11
-RUN pyenv global 3.11
-RUN pip install --upgrade pip
-RUN pip install poetry
+RUN pyenv install 3.12 && pyenv global 3.12
+RUN pip install --upgrade pip && \
+    pip install poetry && \
+    pip cache purge
 
-RUN curl https://sh.rustup.rs -sSf | bash -s -- -y
-RUN echo 'source $HOME/.cargo/env' >> $HOME/.bashrc
-
-# RUN pipx install git+https://github.com/UCSD-E4E/git-annex-remote-synology.git
+CMD ["/bin/bash"]
