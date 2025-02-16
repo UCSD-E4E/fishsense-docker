@@ -1,4 +1,5 @@
-FROM ubuntu:24.04
+ARG IMAGE="ubuntu:24.04"
+FROM ${IMAGE}
 
 SHELL ["/bin/bash", "-c"] 
 
