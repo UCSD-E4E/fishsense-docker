@@ -36,7 +36,11 @@ jobs:
   #       tags: ghcr.io/ucsd-e4e/fishsense-lite:cuda
   #       push: true
 
-  build-cpu:
+  build:
+    strategy:
+      matrix:
+        os: [ubuntu-24.04, ubuntu-24.04-arm]
+
     runs-on: ubuntu-latest
     
     steps:
@@ -53,15 +57,11 @@ jobs:
         username: ${{ github.actor }}
         password: ${{ secrets.GITHUB_TOKEN }}
     -
-      name: Set up QEMU
-      uses: docker/setup-qemu-action@v3
-    -
       name: Build and push
       uses: docker/build-push-action@v6
       with:
         context: .
         file: Dockerfile
-        platforms: linux/amd64,linux/arm64
         build-args: |
           IMAGE=ubuntu:24.04
         tags: ghcr.io/ucsd-e4e/fishsense:cpu
