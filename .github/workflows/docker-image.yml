@@ -11,10 +11,10 @@ jobs:
     strategy:
       matrix:
         os: [ubuntu-24.04, ubuntu-24.04-arm]
-        docker: [ {image: ubuntu, image-tag: 24.04, push-tag: cpu}, {image: nvidia/cuda, image-tag: 12.8.0-cudnn-devel-ubuntu24.04, push-tag: cuda} ]
+        docker: [ {image: ubuntu, image_tag: 24.04, push_tag: cpu}, {image: nvidia/cuda, image_tag: 12.8.0-cudnn-devel-ubuntu24.04, push_tag: cuda} ]
         exclude:
           - os: ubuntu-24.04-arm
-            docker: {image: nvidia/cuda:12.8.0-cudnn-devel-ubuntu24.04, tag: cuda}
+            docker: {image: nvidia/cuda, image_tag: 12.8.0-cudnn-devel-ubuntu24.04, push_tag: cuda}
     
 
     runs-on: ${{ matrix.os }}
