@@ -29,20 +29,6 @@ RUN apt-get update && apt-get upgrade -y && \
                         cmake \
     && apt-get clean && rm -rf /var/lib/apt/lists/*
 
-ARG BUILD_TYPE=cpu
-ARG NVIDIA_DRIVER_VERSION=560.35.03
-RUN if [ "${BUILD_TYPE}" = "cuda" ]; then \
-    apt-get update && \
-    apt-get install -y kmod \
-                        vulkan-tools \
-                        clinfo \
-    && apt-get clean && rm -rf /var/lib/apt/lists/* && \
-    curl https://us.download.nvidia.com/XFree86/Linux-x86_64/560.35.03/NVIDIA-Linux-x86_64-${NVIDIA_DRIVER_VERSION}.run > /driver.run && \
-                        chmod +x /driver.run && \
-                        /driver.run --no-kernel-modules --no-questions --silent && \
-                        rm /driver.run \
-fi
-
 RUN echo 'ubuntu ALL=(ALL) NOPASSWD: ALL' >> /etc/sudoers
 
 USER ubuntu
