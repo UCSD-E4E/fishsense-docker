@@ -1,4 +1,4 @@
-ARG IMAGE="ghcr.io/ucsd-e4e/fishsense:cuda"
+ARG IMAGE="ghcr.io/ucsd-e4e/fishsense-base:cuda"
 FROM ${IMAGE}
 
 USER root
