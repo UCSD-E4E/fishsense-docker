@@ -39,6 +39,7 @@ jobs:
         context: .
         file: Dockerfile
         build-args: |
-          IMAGE=${{ matrix.docker.image }}:${{ matrix.docker.image-tag }}
-        tags: ghcr.io/ucsd-e4e/fishsense:${{ matrix.docker.push-tag }}
+          IMAGE=${{ matrix.docker.image }}:${{ matrix.docker.image_tag }}
+          BUILD_TYPE=${{ matrix.docker.push_tag }}
+        tags: ghcr.io/ucsd-e4e/fishsense:${{ matrix.docker.push_tag }}
         push: true
