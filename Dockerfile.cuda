@@ -9,10 +9,10 @@ RUN apt-get update && apt-get install -y kmod \
     && apt-get clean && rm -rf /var/lib/apt/lists/*
 
 ARG NVIDIA_DRIVER_VERSION=560.35.03
-RUN curl https://us.download.nvidia.com/XFree86/Linux-x86_64/560.35.03/NVIDIA-Linux-x86_64-${NVIDIA_DRIVER_VERSION}.run > /driver.run && \
-                        chmod +x /driver.run && \
-                        /driver.run --no-kernel-modules --no-questions --silent && \
-                        rm /driver.run
+RUN curl https://us.download.nvidia.com/XFree86/Linux-x86_64/560.35.03/NVIDIA-Linux-x86_64-${NVIDIA_DRIVER_VERSION}.run > /driver.run
+RUN chmod +x /driver.run
+RUN /driver.run --no-kernel-modules --no-questions --silent
+RUN rm /driver.run
 
 USER ubuntu
 
