@@ -13,7 +13,7 @@ jobs:
         os: [ubuntu-24.04, ubuntu-24.04-arm]
         docker: 
           - {image: ubuntu, image_tag: 24.04, push_tag: cpu, push: true, image_suffix: ''}
-          - {image: nvidia/cuda, image_tag: 12.8.0-cudnn-devel-ubuntu24.04, push_tag: cuda, push: false, image_suffix: base}
+          - {image: nvidia/cuda, image_tag: 12.8.0-cudnn-devel-ubuntu24.04, push_tag: cuda, push: false, image_suffix: -base}
         exclude:
           - os: ubuntu-24.04-arm
             docker: {image: nvidia/cuda, image_tag: 12.8.0-cudnn-devel-ubuntu24.04, push_tag: cuda, push: false, image_suffix: -base}
