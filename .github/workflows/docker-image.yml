@@ -52,6 +52,6 @@ jobs:
         context: .
         file: Dockerfile.cuda
         build-args: |
-          IMAGE=${{ matrix.docker.image }}:${{ matrix.docker.image_tag }}
+          IMAGE=ghcr.io/ucsd-e4e/fishsense${{ matrix.docker.image_suffix }}:${{ matrix.docker.push_tag }}
         tags: ghcr.io/ucsd-e4e/fishsense:${{ matrix.docker.push_tag }}
         push: true
