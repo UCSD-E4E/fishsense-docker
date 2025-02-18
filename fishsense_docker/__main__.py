@@ -80,7 +80,7 @@ def main():
     configure_user(dockerfile)
 
     dockerfile.run("curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh -s -- -y")
-    install_pyenv()
+    install_pyenv(dockerfile)
     
     dockerfile.cmd("/bin/bash")
 
