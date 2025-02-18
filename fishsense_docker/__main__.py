@@ -1,17 +1,8 @@
 from fishsense_docker.dockerfile import Dockerfile
 from argparse import ArgumentParser
+from typing import Any
 
-def main():
-    parser = ArgumentParser("fishsense-docker")
-    parser.add_argument("-i", "--image", required=True, help="The image for the resulting Dockerfile.")
-    parser.add_argument("-o", "--output", required=True, help="The output file for the Dockerfile.")
-
-    args = parser.parse_args()
-
-    dockerfile = Dockerfile(args.image)
-    
-    dockerfile.shell("/bin/bash", "-c")
-
+def install_dependencies(dockerfile: Dockerfile, args: Any):
     dockerfile.run("apt-get update && apt-get upgrade -y && \
                     apt-get install -y sudo \
                                         build-essential \
@@ -38,6 +29,10 @@ def main():
                                         cmake \
                     && apt-get clean && rm -rf /var/lib/apt/lists/*")
     
+    install_nvidia_dependencies(dockerfile, args)
+
+
+def install_nvidia_dependencies(dockerfile: Dockerfile, args: Any):
     if "nvidia" in args.image:
         dockerfile.run("apt-get update && apt-get install -y kmod \
                             vulkan-tools \
@@ -49,7 +44,8 @@ def main():
                         chmod +x /driver.run && \
                         /driver.run --no-kernel-modules --no-questions --silent && \
                         rm /driver.run")
-
+        
+def configure_user(dockerfile: Dockerfile):
     dockerfile.run("echo 'ubuntu ALL=(ALL) NOPASSWD: ALL' >> /etc/sudoers")
 
     dockerfile.user("ubuntu")
@@ -57,8 +53,7 @@ def main():
     dockerfile.run("mkdir -p ${HOME}")
     dockerfile.workdir("${HOME}")
 
-    dockerfile.run("curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh -s -- -y")
-
+def install_pyenv(dockerfile: Dockerfile):
     dockerfile.env(PYENV_ROOT="${HOME}/.pyenv", PATH="${PYENV_ROOT}/shims:${PYENV_ROOT}/bin:${PATH}")
     dockerfile.run('git clone --depth=1 https://github.com/pyenv/pyenv.git .pyenv && \
                     echo "export PYENV_ROOT=\\"\$HOME/.pyenv\\"" >> ${HOME}/.bashrc && \
@@ -70,6 +65,22 @@ def main():
     dockerfile.run("pip install --upgrade pip && \
                     pip install poetry && \
                     pip cache purge")
+
+def main():
+    parser = ArgumentParser("fishsense-docker")
+    parser.add_argument("-i", "--image", required=True, help="The image for the resulting Dockerfile.")
+    parser.add_argument("-o", "--output", required=True, help="The output file for the Dockerfile.")
+
+    args = parser.parse_args()
+
+    dockerfile = Dockerfile(args.image)
+    dockerfile.shell("/bin/bash", "-c")
+
+    install_dependencies(dockerfile, args)
+    configure_user(dockerfile)
+
+    dockerfile.run("curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh -s -- -y")
+    install_pyenv()
     
     dockerfile.cmd("/bin/bash")
 
