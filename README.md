@@ -1,7 +1,19 @@
-# FishSense Docker Dev 
-This project is to create a docker container that has the development dependencies for running FishSense code.  It is based off of Ubuntu 24.04 and does not currently support CUDA.
+# FishSense Docker 
+This project ccontains the base docker container for FishSense projects. It currently build three containers
+* x86_64 CPU only
+* x86_64 CUDA
+* aarch64 CPU only
 
-## Build Locally
+We have chosen to explicitly not support aarch64+CUDA despite the fact that NVIDIA's CUDA container has support for this. This decision may change in the future if NVIDIA provides additional ARM devices.
+
+## Build Locally (CPU)
 ```
-docker build . -t ghcr.io/ucsd-e4e/fishsense-docker-dev:main
+python -m fishsense_docker --image ubuntu:24.04 --output Dockerfile
+dockerfile build -t ghcr.io/ucsd-e4e/fishsense:cpu .
+```
+
+## Build Locally (GPU)
+```
+python -m fishsense_docker --image nvidia/cuda:12.8.0-cudnn-devel-ubuntu24.04 --output Dockerfile
+dockerfile build -t ghcr.io/ucsd-e4e/fishsense:gpu .
 ```
