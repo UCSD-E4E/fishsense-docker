@@ -63,7 +63,7 @@ def main():
     dockerfile.run('git clone --depth=1 https://github.com/pyenv/pyenv.git .pyenv && \
                     echo "export PYENV_ROOT=\\"\$HOME/.pyenv\\"" >> ${HOME}/.bashrc && \
                     echo "[[ -d \$PYENV_ROOT/bin ]] && export PATH="\$PYENV_ROOT/bin:\$PATH"" >> ${HOME}/.bashrc && \
-                    echo "eval \"\$(pyenv init -)\\"" >> ${HOME}/.bashrc && \
+                    echo "eval \\"\\$(pyenv init -)\\"" >> ${HOME}/.bashrc && \
                     echo "\\"$(pyenv virtualenv-init -)\\"" >> ${HOME}/.bashrc')
     
     dockerfile.run("pyenv install 3.12 && pyenv global 3.12")
