@@ -47,5 +47,5 @@ jobs:
       with:
         context: .
         file: Dockerfile
-        tags: ghcr.io/ucsd-e4e/fishsense${{ matrix.docker.image_suffix }}:${{ matrix.docker.push_tag }}
+        tags: ghcr.io/ucsd-e4e/fishsense:${{ matrix.docker.push_tag }}
         push: true
