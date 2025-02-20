@@ -20,6 +20,9 @@ class Dockerfile:
     
     def cmd(self, *cmd_args: Iterable[str]):
         self.__write_line(f"CMD [{", ".join(f'"{c}"' for c in cmd_args)}]")
+
+    def copy(self, source: str, destinsation: str):
+        self.__write_line(f"COPY {source} {destinsation}")
     
     def env(self, **kwargs: Dict[str, str]):
         for key, value in kwargs.items():

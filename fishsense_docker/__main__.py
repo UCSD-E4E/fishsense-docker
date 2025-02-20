@@ -65,6 +65,10 @@ def install_pyenv(dockerfile: Dockerfile):
     dockerfile.run("pip install --upgrade pip && \
                     pip install poetry && \
                     pip cache purge")
+    
+def install_rust(dockerfile: Dockerfile):
+    dockerfile.copy("rust-toolchain.toml", "${HOME}/rust-toolchain.toml")
+    dockerfile.run("curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh -s -- -y")
 
 def main():
     parser = ArgumentParser("fishsense-docker")
@@ -79,8 +83,8 @@ def main():
     install_dependencies(dockerfile, args)
     configure_user(dockerfile)
 
-    dockerfile.run("curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh -s -- -y")
     install_pyenv(dockerfile)
+    install_rust(dockerfile)
     
     dockerfile.cmd("/bin/bash")
 

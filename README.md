@@ -9,11 +9,11 @@ We have chosen to explicitly not support aarch64+CUDA despite the fact that NVID
 ## Build Locally (CPU)
 ```
 python -m fishsense_docker --image ubuntu:24.04 --output Dockerfile
-dockerfile build -t ghcr.io/ucsd-e4e/fishsense:cpu .
+docker build -t ghcr.io/ucsd-e4e/fishsense:cpu .
 ```
 
 ## Build Locally (GPU)
 ```
 python -m fishsense_docker --image nvidia/cuda:12.6.3-cudnn-devel-ubuntu24.04 --output Dockerfile
-dockerfile build -t ghcr.io/ucsd-e4e/fishsense:gpu .
+docker build -t ghcr.io/ucsd-e4e/fishsense:cuda .
 ```
