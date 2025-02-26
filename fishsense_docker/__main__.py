@@ -27,6 +27,7 @@ def install_dependencies(dockerfile: Dockerfile, args: Any):
                                         libclang-dev \
                                         llvm \
                                         cmake \
+                                        sqlite3 \
                     && apt-get clean && rm -rf /var/lib/apt/lists/*")
     
     install_nvidia_dependencies(dockerfile, args)
