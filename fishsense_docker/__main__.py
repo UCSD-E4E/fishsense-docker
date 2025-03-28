@@ -27,6 +27,7 @@ def install_dependencies(dockerfile: Dockerfile, args: Any):
                                         libclang-dev \
                                         llvm \
                                         cmake \
+                                        sqlite3 \
                     && apt-get clean && rm -rf /var/lib/apt/lists/*")
     
     install_nvidia_dependencies(dockerfile, args)
@@ -36,6 +37,8 @@ def install_nvidia_dependencies(dockerfile: Dockerfile, args: Any):
     if "nvidia" in args.image:
         dockerfile.run("apt-get update && apt-get install -y kmod \
                             vulkan-tools \
+                            ocl-icd-libopencl1 \
+                            ocl-icd-opencl-dev \
                             clinfo \
                         && apt-get clean && rm -rf /var/lib/apt/lists/*")
         
