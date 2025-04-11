@@ -4,8 +4,7 @@ from typing import Any
 
 def install_dependencies(dockerfile: Dockerfile, args: Any):
     dockerfile.run("apt-get update && apt-get upgrade -y && \
-                    apt-get install -y sudo \
-                                        build-essential \
+                    apt-get install -y build-essential \
                                         git \
                                         libssl-dev \
                                         zlib1g-dev \
@@ -25,7 +24,8 @@ def install_dependencies(dockerfile: Dockerfile, args: Any):
                                         libopencv-dev \
                                         clang \
                                         libclang-dev \
-                                        llvm \
+                                        libclang-cpp-dev \
+                                        llvm-dev \
                                         cmake \
                                         sqlite3 \
                                         vim \
@@ -36,22 +36,25 @@ def install_dependencies(dockerfile: Dockerfile, args: Any):
 
 def install_nvidia_dependencies(dockerfile: Dockerfile, args: Any):
     if "nvidia" in args.image:
-        dockerfile.run("apt-get update && apt-get install -y kmod \
-                            vulkan-tools \
-                            ocl-icd-libopencl1 \
+        dockerfile.run("apt-get update && apt-get install -y ocl-icd-libopencl1 \
                             ocl-icd-opencl-dev \
+                            ocl-icd-dev \
+                            opencl-headers \
                             clinfo \
                         && apt-get clean && rm -rf /var/lib/apt/lists/*")
         
-        dockerfile.arg(NVIDIA_DRIVER_VERSION="560.35.03")
-        dockerfile.run("curl https://us.download.nvidia.com/XFree86/Linux-x86_64/560.35.03/NVIDIA-Linux-x86_64-${NVIDIA_DRIVER_VERSION}.run > /driver.run && \
-                        chmod +x /driver.run && \
-                        /driver.run --no-kernel-modules --no-questions --silent && \
-                        rm /driver.run")
+        dockerfile.run("git clone https://github.com/pocl/pocl.git /pocl \
+                       && cd /pocl \
+                       && git checkout v6.0 \
+                       && mkdir build \
+                       && cd build \
+                       && cmake -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX=/ -DENABLE_CUDA=ON .. \
+                       && make -j \
+                       && make install \
+                       && cd / \
+                       && rm -rf /pocl")
         
 def configure_user(dockerfile: Dockerfile):
-    dockerfile.run("echo 'ubuntu ALL=(ALL) NOPASSWD: ALL' >> /etc/sudoers")
-
     dockerfile.user("ubuntu")
     dockerfile.env(HOME="/home/ubuntu")
     dockerfile.run("mkdir -p ${HOME}")

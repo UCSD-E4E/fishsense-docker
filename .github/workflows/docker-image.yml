@@ -24,6 +24,15 @@ jobs:
     runs-on: ${{ matrix.os }}
     
     steps:
+    - name: Docker/ENV cleanup Cleanup
+      run: |
+        docker image prune -a -f
+        docker container prune -f
+        sudo rm -rf /usr/local/lib/android
+        sudo rm -rf /usr/share/dotnet
+        sudo rm -rf /opt/ghc
+        sudo rm -rf "/usr/local/share/boost"
+        sudo rm -rf "$AGENT_TOOLSDIRECTORY"
     - 
       uses: actions/checkout@v4
     - name: Set up Python 3.12
