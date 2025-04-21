@@ -13,8 +13,8 @@ jobs:
     strategy:
       matrix:
         docker: 
-          - {image: ubuntu, image_tag: 24.04, push_tag: cpu,}
-          - {image: nvidia/cuda, image_tag: 12.6.3-cudnn-devel-ubuntu24.04, push_tag: cuda}
+          - {image: ubuntu, image_tag: 24.04, push_tag: cpu, platforms: 'linux/amd64,linux/arm64'}
+          - {image: nvidia/cuda, image_tag: 12.6.3-cudnn-devel-ubuntu24.04, push_tag: cuda, platforms: linux/amd64}
     
 
     runs-on: ubuntu-latest
@@ -57,5 +57,5 @@ jobs:
         context: .
         file: Dockerfile
         tags: ghcr.io/ucsd-e4e/fishsense:${{ matrix.docker.push_tag }}
-        platforms: linux/amd64,linux/arm64
+        platforms: ${{ matrix.docker.platforms }}
         push: true
