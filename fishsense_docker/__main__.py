@@ -54,9 +54,9 @@ def install_nvidia_dependencies(dockerfile: Dockerfile, args: Any):
                        && cd / \
                        && rm -rf /pocl")
         
-def configure_user(dockerfile: Dockerfile):
-    dockerfile.user("ubuntu")
-    dockerfile.env(HOME="/home/ubuntu")
+def configure_user(dockerfile: Dockerfile, user: str):
+    dockerfile.user(user)
+    dockerfile.env(HOME=f"/home/{user}")
     dockerfile.run("mkdir -p ${HOME}")
     dockerfile.workdir("${HOME}")
 
@@ -80,6 +80,7 @@ def install_rust(dockerfile: Dockerfile):
 def main():
     parser = ArgumentParser("fishsense-docker")
     parser.add_argument("-i", "--image", required=True, help="The image for the resulting Dockerfile.")
+    parser.add_argument("-u", "--user", required=True, help="The non-root user the container should run under.")
     parser.add_argument("-o", "--output", required=True, help="The output file for the Dockerfile.")
 
     args = parser.parse_args()
@@ -90,7 +91,7 @@ def main():
     dockerfile.user("root")
 
     install_dependencies(dockerfile, args)
-    configure_user(dockerfile)
+    configure_user(dockerfile, args.user)
 
     install_pyenv(dockerfile)
     install_rust(dockerfile)

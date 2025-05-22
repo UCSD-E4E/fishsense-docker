@@ -13,9 +13,9 @@ jobs:
     strategy:
       matrix:
         docker: 
-          - {image: ubuntu, image_tag: 24.04, push_tag: cpu, platforms: 'linux/amd64,linux/arm64', runs-on: ubuntu-24.04}
-          - {image: rayproject/ray, image_tag: 2.46.0.0e19ea-py312-aarch64, push_tag: ray-cpu, platforms: 'linux/arm64', runs-on: ubuntu-24.04-arm}
-          - {image: nvidia/cuda, image_tag: 12.6.3-cudnn-devel-ubuntu24.04, push_tag: cuda, platforms: linux/amd64, runs-on: ubuntu-24.04}
+          - {image: ubuntu, image_tag: 24.04, push_tag: cpu, platforms: 'linux/amd64,linux/arm64', runs-on: ubuntu-24.04, user: ubuntu}
+          - {image: rayproject/ray, image_tag: 2.46.0.0e19ea-py312-aarch64, push_tag: ray-cpu, platforms: 'linux/arm64', runs-on: ubuntu-24.04-arm, user: ray}
+          - {image: nvidia/cuda, image_tag: 12.6.3-cudnn-devel-ubuntu24.04, push_tag: cuda, platforms: linux/amd64, runs-on: ubuntu-24.04, user: ubuntu}
     
 
     runs-on: ${{ matrix.docker.runs-on }}
@@ -38,7 +38,7 @@ jobs:
         python-version: '3.12'
     - name: Generate Dockerfile
       run: |
-        python -m fishsense_docker --image ${{ matrix.docker.image }}:${{ matrix.docker.image_tag }} --output Dockerfile
+        python -m fishsense_docker --image ${{ matrix.docker.image }}:${{ matrix.docker.image_tag }} --user ${{ matrix.docker.user }} --output Dockerfile
     - name: Set up QEMU
       uses: docker/setup-qemu-action@v3
     -
