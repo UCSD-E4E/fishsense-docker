@@ -95,6 +95,8 @@ def main():
 
     install_pyenv(dockerfile)
     install_rust(dockerfile)
+
+    dockerfile.run("pip install git+https://github.com/UCSD-E4E/fishsense-lite.git@main")
     
     dockerfile.cmd("/bin/bash")
 
