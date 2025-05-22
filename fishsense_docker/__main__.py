@@ -87,6 +87,8 @@ def main():
     dockerfile = Dockerfile(args.image)
     dockerfile.shell("/bin/bash", "-c")
 
+    dockerfile.user("root")
+
     install_dependencies(dockerfile, args)
     configure_user(dockerfile)
 

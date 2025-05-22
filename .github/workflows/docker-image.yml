@@ -13,11 +13,12 @@ jobs:
     strategy:
       matrix:
         docker: 
-          - {image: ubuntu, image_tag: 24.04, push_tag: cpu, platforms: 'linux/amd64,linux/arm64'}
-          - {image: nvidia/cuda, image_tag: 12.6.3-cudnn-devel-ubuntu24.04, push_tag: cuda, platforms: linux/amd64}
+          - {image: ubuntu, image_tag: 24.04, push_tag: cpu, platforms: 'linux/amd64,linux/arm64', runs-on: ubuntu-24.04}
+          - {image: rayproject/ray, image_tag: 2.46.0.0e19ea-py312-aarch64, push_tag: ray-cpu, platforms: 'linux/arm64', runs-on: ubuntu-24.04-arm}
+          - {image: nvidia/cuda, image_tag: 12.6.3-cudnn-devel-ubuntu24.04, push_tag: cuda, platforms: linux/amd64, runs-on: ubuntu-24.04}
     
 
-    runs-on: ubuntu-latest
+    runs-on: ${{ matrix.docker.runs-on }}
     
     steps:
     - name: Docker/ENV cleanup Cleanup
