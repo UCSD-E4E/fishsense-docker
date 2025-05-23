@@ -6,6 +6,10 @@ This project ccontains the base docker container for FishSense projects. It curr
 
 We have chosen to explicitly not support aarch64+CUDA despite the fact that NVIDIA's CUDA container has support for this. This decision may change in the future if NVIDIA provides additional ARM devices.
 
+## Ray
+
+We have support for Ray as well on aarch64.
+
 ## Build Locally (CPU)
 ```
 python -m fishsense_docker --image ubuntu:24.04 --output Dockerfile
