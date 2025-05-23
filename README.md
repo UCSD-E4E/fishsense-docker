@@ -8,7 +8,7 @@ We have chosen to explicitly not support aarch64+CUDA despite the fact that NVID
 
 ## Ray
 
-We have support for Ray as well on aarch64.
+We have support for Ray as well on aarch64. 
 
 ## Build Locally (CPU)
 ```
