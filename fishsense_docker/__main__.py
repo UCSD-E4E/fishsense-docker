@@ -72,6 +72,9 @@ def install_pyenv(dockerfile: Dockerfile):
     dockerfile.run("pip install --upgrade pip && \
                     pip install poetry && \
                     pip cache purge")
+
+def install_uv(dockerfile: Dockerfile):
+    dockerfile.run("curl -LsSf https://astral.sh/uv/install.sh | sh")
     
 def install_rust(dockerfile: Dockerfile):
     dockerfile.copy("rust-toolchain.toml", "${HOME}/rust-toolchain.toml")
@@ -93,7 +96,8 @@ def main():
     install_dependencies(dockerfile, args)
     configure_user(dockerfile, args.user)
 
-    install_pyenv(dockerfile)
+    # install_pyenv(dockerfile)
+    install_uv(dockerfile)
     install_rust(dockerfile)
     
     dockerfile.cmd("/bin/bash")
