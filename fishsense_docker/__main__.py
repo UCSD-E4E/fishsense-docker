@@ -96,7 +96,6 @@ def main():
     install_dependencies(dockerfile, args)
     configure_user(dockerfile, args.user)
 
-    # install_pyenv(dockerfile)
     install_uv(dockerfile)
     install_rust(dockerfile)
     
